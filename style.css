@@ -1,0 +1,29 @@
+html{
+    height: 100%;
+}
+
+body{
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 130px;
+    margin: 0;
+}
+
+.container{
+    width: 960px;
+    height: 960px;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 250px;
+}
+
+.grid{
+    border: 1px solid black;
+    margin: 1px;
+}
+
+.buttons{
+    display: flex;
+}
