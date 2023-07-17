@@ -2,6 +2,9 @@ const container = document.querySelector('.container');
 let input = 16;
 paintGrid(input);
 
+container.addEventListener('dragstart', e => e.preventDefault());
+
+
 const size = document.querySelector('.size');
 const clear = document.querySelector('.clear');
 const rainbow = document.querySelector('.rainbow');
@@ -9,12 +12,24 @@ const darker = document.querySelector('.darker')
 
 clear.addEventListener('click', () => {
     paintGrid(input);
+    container.addEventListener('mousedown',blackListenerOn);
+    container.addEventListener('mouseup',blackListenerOff);
+    const divs = document.querySelectorAll('.container div');
+    divs.forEach(div =>{
+        div.addEventListener('mousedown',changeColorToBlack);
+    });
 })
 
 size.addEventListener('click',() => {
     let enter = prompt('Enter number of squares on a side')
     if(enter === null || enter === undefined || enter === '' || enter > 100) return;
     paintGrid(enter);
+    container.addEventListener('mousedown',blackListenerOn);
+    container.addEventListener('mouseup',blackListenerOff);
+    const divs = document.querySelectorAll('.container div');
+    divs.forEach(div =>{
+        div.addEventListener('mousedown',changeColorToBlack);
+    });
     input = enter;
 });
 
@@ -28,7 +43,6 @@ function paintGrid(input){
         div.style.height = size;
         div.dataset.darken = 100;
         div.classList.add('grid');
-        div.addEventListener('mouseover',changeColorToBlack);
         container.appendChild(div);
     }
 }
@@ -46,20 +60,82 @@ function changeColorToDarker(){
     this.dataset.darken -= 10;
 }
 
-rainbow.addEventListener('click',() => {
+function blackListenerOn(){
+    const divs = document.querySelectorAll('.container div');
+    divs.forEach(div =>{
+        div.addEventListener('mouseover',changeColorToBlack);
+    })
+}
+
+function blackListenerOff(){
     const divs = document.querySelectorAll('.container div');
     divs.forEach(div =>{
         div.removeEventListener('mouseover',changeColorToBlack);
-        div.removeEventListener('mouseover',changeColorToDarker);
-        div.addEventListener('mouseover',changeColorToRainbow);
     })
+}
+
+
+function rainbowListenerOn(){
+    const divs = document.querySelectorAll('.container div');
+    divs.forEach(div =>{
+        div.removeEventListener('mousedown',changeColorToBlack);
+        div.addEventListener('mouseover',changeColorToRainbow);
+    });
+}
+
+function rainbowListenerOff(){
+    const divs = document.querySelectorAll('.container div');
+    divs.forEach(div =>{
+        div.removeEventListener('mouseover',changeColorToRainbow);
+    });
+}
+
+function darkerListenerOn(){
+    const divs = document.querySelectorAll('.container div');
+    divs.forEach(div =>{
+        div.removeEventListener('mousedown',changeColorToBlack);
+        div.addEventListener('mouseover',changeColorToDarker);
+    });
+}
+
+function darkerListenerOff(){
+    const divs = document.querySelectorAll('.container div');
+    divs.forEach(div =>{
+        div.removeEventListener('mouseover',changeColorToDarker);
+    });
+}
+
+container.addEventListener('mousedown',blackListenerOn);
+container.addEventListener('mouseup',blackListenerOff);
+const divs = document.querySelectorAll('.container div');
+divs.forEach(div =>{
+    div.addEventListener('mousedown',changeColorToBlack);
+});
+
+rainbow.addEventListener('click',() =>{
+    container.removeEventListener('mousedown',blackListenerOn);
+    container.removeEventListener('mouseup',blackListenerOff);
+    container.removeEventListener('mousedown',darkerListenerOn);
+    container.removeEventListener('mouseup',darkerListenerOff);
+    const divs = document.querySelectorAll('.container div');
+    divs.forEach(div =>{
+        div.removeEventListener('mousedown',changeColorToDarker);
+        div.addEventListener('mousedown',changeColorToRainbow);
+    });
+    container.addEventListener('mousedown',rainbowListenerOn);
+    container.addEventListener('mouseup',rainbowListenerOff);
 });
 
 darker.addEventListener('click',() => {
+    container.removeEventListener('mousedown', blackListenerOn);
+    container.removeEventListener('mouseup', blackListenerOff);
+    container.removeEventListener('mousedown',rainbowListenerOn);
+    container.removeEventListener('mouseup',rainbowListenerOff);
     const divs = document.querySelectorAll('.container div');
     divs.forEach(div =>{
-        div.removeEventListener('mouseover',changeColorToBlack);
-        div.removeEventListener('mouseover',changeColorToRainbow);
-        div.addEventListener('mouseover',changeColorToDarker);  
-    })
+        div.removeEventListener('mousedown',changeColorToRainbow);
+        div.addEventListener('mousedown',changeColorToDarker);
+    });
+    container.addEventListener('mousedown',darkerListenerOn);
+    container.addEventListener('mouseup',darkerListenerOff);
 });
