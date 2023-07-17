@@ -6,33 +6,18 @@ const size = document.querySelector('.size');
 const clear = document.querySelector('.clear');
 const rainbow = document.querySelector('.rainbow');
 const darker = document.querySelector('.darker')
-const divs = document.querySelectorAll('.grid')
-
-rainbow.addEventListener('click',() => {
-    divs.forEach(div =>{
-        div.removeEventListener('mouseover',changeColorToBlack);
-        div.removeEventListener('mouseover',changeColorToDarker);
-        div.addEventListener('mouseover',changeColorToRainbow);
-    })
-})
-
-darker.addEventListener('click',() => {
-    divs.forEach(div =>{
-        div.removeEventListener('mouseover',changeColorToBlack);
-        div.removeEventListener('mouseover',changeColorToRainbow);
-        div.addEventListener('mouseover',changeColorToDarker);  
-    })
-})
 
 clear.addEventListener('click', () => {
     paintGrid(input);
 })
+
 size.addEventListener('click',() => {
     let enter = prompt('Enter number of squares on a side')
     if(enter === null || enter === undefined || enter === '' || enter > 100) return;
     paintGrid(enter);
     input = enter;
 });
+
 
 function paintGrid(input){
     container.replaceChildren();
@@ -60,3 +45,21 @@ function changeColorToDarker(){
     this.style.filter = `brightness(${this.dataset.darken - 10}%)`
     this.dataset.darken -= 10;
 }
+
+rainbow.addEventListener('click',() => {
+    const divs = document.querySelectorAll('.container div');
+    divs.forEach(div =>{
+        div.removeEventListener('mouseover',changeColorToBlack);
+        div.removeEventListener('mouseover',changeColorToDarker);
+        div.addEventListener('mouseover',changeColorToRainbow);
+    })
+});
+
+darker.addEventListener('click',() => {
+    const divs = document.querySelectorAll('.container div');
+    divs.forEach(div =>{
+        div.removeEventListener('mouseover',changeColorToBlack);
+        div.removeEventListener('mouseover',changeColorToRainbow);
+        div.addEventListener('mouseover',changeColorToDarker);  
+    })
+});
